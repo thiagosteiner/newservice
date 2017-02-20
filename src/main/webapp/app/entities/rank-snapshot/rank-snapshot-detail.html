@@ -1,0 +1,23 @@
+
+<div>
+    <h2><span>Rank Snapshot</span> {{vm.rankSnapshot.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row jh-entity-details">
+        <dt><span>Epoch</span></dt>
+        <dd>
+            <span>{{vm.rankSnapshot.epoch}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="rank-snapshot-detail.edit({id:vm.rankSnapshot.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>

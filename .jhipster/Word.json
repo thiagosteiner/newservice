@@ -1,0 +1,25 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "wordRank",
+            "otherEntityName": "wordRank",
+            "otherEntityRelationshipName": "word"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "wordstring",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170212235925",
+    "dto": "mapstruct",
+    "service": "no",
+    "entityTableName": "word",
+    "pagination": "no"
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns='http://www.ehcache.org/v3'
+         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+    <cache-template name="simple">
+        <expiry>
+            <ttl unit="seconds">3600</ttl>
+        </expiry>
+        <heap>100</heap>
+    </cache-template>
+    
+    <cache-template name="reviewvector">
+        <expiry>
+            <ttl unit="seconds">3600</ttl>
+        </expiry>
+        <heap>10000</heap>
+    </cache-template>
+
+    <cache alias="com.steiner.myservice.domain.User" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.Authority" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.User.authorities" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.PersistentToken" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.User.persistentTokens" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.Book" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.Book.reviews" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.RankSnapshot" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.RankSnapshot.wordRanks" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.Review" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.Review.wordOccurrences" uses-template="simple"/>
+    
+    <cache alias="com.steiner.myservice.domain.ReviewVector" uses-template="reviewvector"/>
+
+    <cache alias="com.steiner.myservice.domain.Word" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.Word.wordOccurrences" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.Word.wordRanks" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.WordOccurrences" uses-template="simple"/>
+
+    <cache alias="com.steiner.myservice.domain.WordRank" uses-template="simple"/>
+
+    <!-- jhipster-needle-ehcache-add-entry -->
+</config>

@@ -1,0 +1,66 @@
+<div>
+    <h2>Reviews</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="review.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span >
+                        Create new Review
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Reviewstring</span></th>
+                    <th><span>Reviewtext</span></th>
+                    <th><span>Book</span></th>
+                    <th><span>Review Vector</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="review in vm.reviews track by review.id">
+                    <td><a ui-sref="review-detail({id:review.id})">{{review.id}}</a></td>
+                    <td>{{review.reviewstring}}</td>
+                    <td>{{review.reviewtext}}</td>
+                    <td>
+                        <a ui-sref="book-detail({id:review.bookId})">{{review.bookId}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="review-vector-detail({id:review.reviewVectorId})">{{review.reviewVectorId}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="review-detail({id:review.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="review.edit({id:review.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="review.delete({id:review.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

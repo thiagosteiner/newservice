@@ -1,0 +1,25 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "wordRank",
+            "otherEntityName": "wordRank",
+            "otherEntityRelationshipName": "rankSnapshot"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "epoch",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170212235925",
+    "dto": "mapstruct",
+    "service": "no",
+    "entityTableName": "rank_snapshot",
+    "pagination": "no"
+}

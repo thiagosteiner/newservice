@@ -1,0 +1,31 @@
+
+<div>
+    <h2><span>Word Rank</span> {{vm.wordRank.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row jh-entity-details">
+        <dt><span>Rank</span></dt>
+        <dd>
+            <span>{{vm.wordRank.rank}}</span>
+        </dd>
+        <dt><span>Rank Snapshot</span></dt>
+        <dd>
+            <a ui-sref="rank-snapshot-detail({id:vm.wordRank.rankSnapshotId})">{{vm.wordRank.rankSnapshotId}}</a>
+        </dd>
+        <dt><span>Word</span></dt>
+        <dd>
+            <a ui-sref="word-detail({id:vm.wordRank.wordId})">{{vm.wordRank.wordWordstring}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="word-rank-detail.edit({id:vm.wordRank.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>

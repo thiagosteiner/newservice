@@ -1,0 +1,66 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myWordOccurrencesLabel">Create or edit a Word Occurrences</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.wordOccurrences.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.wordOccurrences.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_amountoccurrences">Amountoccurrences</label>
+            <input type="number" class="form-control" name="amountoccurrences" id="field_amountoccurrences"
+                    ng-model="vm.wordOccurrences.amountoccurrences"
+                    required/>
+            <div ng-show="editForm.amountoccurrences.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.amountoccurrences.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.amountoccurrences.$error.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_word">Word</label>
+            <input type="text" class="form-control" name="word" id="field_word"
+                    ng-model="vm.wordOccurrences.word"
+                    required/>
+            <div ng-show="editForm.word.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.word.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_review">Review</label>
+            <select class="form-control" id="field_review" name="review" ng-model="vm.wordOccurrences.reviewId" ng-options="review.id as review.id for review in vm.reviews"             required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div ng-show="editForm.review.$invalid">
+            <p class="help-block"
+                ng-show="editForm.review.$error.required">
+                This field is required.
+            </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

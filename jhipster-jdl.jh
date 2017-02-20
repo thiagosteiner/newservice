@@ -1,0 +1,34 @@
+entity Word {
+	wordstring String required
+}
+
+entity Book{
+	title String required
+}
+
+entity Review
+
+
+entity WordOccurrences {
+	amountoccurrences Integer required
+}
+
+entity RankSnapshot{
+	last_update ZonedDateTime required
+}
+
+entity WordRank{
+	rank Integer required
+}
+
+relationship OneToMany {
+  Book{review} to Review{book},
+  Review{wordOccurrences} to WordOccurrences{review},
+  Word{wordOccurrences} to WordOccurrences{word(wordstring)},
+  Word{wordRank} to WordRank{word(wordstring)},
+  RankSnapshot{wordRank} to WordRank{rankSnapshot}
+}
+
+dto all with mapstruct
+
+skipClient for Word, Book, Review, WordOccurrences, RankSnapshot, WordRank

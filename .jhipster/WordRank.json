@@ -1,0 +1,34 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "rankSnapshot",
+            "otherEntityName": "rankSnapshot",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "word",
+            "otherEntityName": "word",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "wordstring"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "rank",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170212235925",
+    "dto": "mapstruct",
+    "service": "no",
+    "entityTableName": "word_rank",
+    "pagination": "no"
+}

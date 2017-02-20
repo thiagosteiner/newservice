@@ -1,0 +1,35 @@
+
+<div>
+    <h2><span>Review</span> {{vm.review.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row jh-entity-details">
+        <dt><span>Reviewstring</span></dt>
+        <dd>
+            <span>{{vm.review.reviewstring}}</span>
+        </dd>
+        <dt><span>Reviewtext</span></dt>
+        <dd>
+            <span>{{vm.review.reviewtext}}</span>
+        </dd>
+        <dt><span>Book</span></dt>
+        <dd>
+            <a ui-sref="book-detail({id:vm.review.bookId})">{{vm.review.bookId}}</a>
+        </dd>
+        <dt><span>Review Vector</span></dt>
+        <dd>
+            <a ui-sref="review-vector-detail({id:vm.review.reviewVectorId})">{{vm.review.reviewVectorId}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="review-detail.edit({id:vm.review.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>

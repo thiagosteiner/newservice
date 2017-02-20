@@ -1,0 +1,12 @@
+version: '2'
+services:
+    myservice-postgresql:
+        container_name: myservice-postgresql
+        image: postgres:9.5.4
+        # volumes:
+        #     - ~/volumes/jhipster/myservice/postgresql/:/var/lib/postgresql/
+        environment:
+            - POSTGRES_USER=myservice
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432

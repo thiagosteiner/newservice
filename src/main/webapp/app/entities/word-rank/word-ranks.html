@@ -1,0 +1,64 @@
+<div>
+    <h2>Word Ranks</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="word-rank.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span >
+                        Create new Word Rank
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Rank</span></th>
+                    <th><span>Rank Snapshot</span></th>
+                    <th><span>Word</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="wordRank in vm.wordRanks track by wordRank.id">
+                    <td><a ui-sref="word-rank-detail({id:wordRank.id})">{{wordRank.id}}</a></td>
+                    <td>{{wordRank.rank}}</td>
+                    <td>
+                        <a ui-sref="rank-snapshot-detail({id:wordRank.rankSnapshotId})">{{wordRank.rankSnapshotId}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="word-detail({id:wordRank.wordId})">{{wordRank.wordWordstring}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="word-rank-detail({id:wordRank.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="word-rank.edit({id:wordRank.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="word-rank.delete({id:wordRank.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

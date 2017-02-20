@@ -1,0 +1,22 @@
+{
+  "generator-jhipster": {
+    "jhipsterVersion": "4.0.2",
+    "baseName": "myservice",
+    "packageName": "com.steiner.myservice",
+    "packageFolder": "com/steiner/myservice",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "buildTool": "maven",
+    "enableSocialSignIn": false,
+    "jwtSecretKey": "c03ae3c28942434628b419c9b8f7d58cc8fef480",
+    "enableTranslation": false
+  }
+}
