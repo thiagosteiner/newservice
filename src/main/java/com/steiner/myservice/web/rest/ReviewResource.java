@@ -1,6 +1,7 @@
 package com.steiner.myservice.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.steiner.myservice.domain.Review;
 
 import com.steiner.myservice.repository.ReviewRepository;
@@ -71,7 +72,7 @@ public class ReviewResource {
      */
     @PostMapping("/reviews")
     @Timed
-    public ResponseEntity<ReviewDTO> createReview(@Valid @RequestBody ReviewDTO reviewDTO) throws URISyntaxException {
+    public ResponseEntity<ReviewDTO> createReview(@Valid @RequestBody ReviewDTO reviewDTO) throws URISyntaxException, JsonProcessingException {
         log.debug("REST request to save Review : {}", reviewDTO);
         if (reviewDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new review cannot already have an ID")).body(null);
@@ -124,7 +125,7 @@ public class ReviewResource {
      */
     @PutMapping("/reviews")
     @Timed
-    public ResponseEntity<ReviewDTO> updateReview(@Valid @RequestBody ReviewDTO reviewDTO) throws URISyntaxException {
+    public ResponseEntity<ReviewDTO> updateReview(@Valid @RequestBody ReviewDTO reviewDTO) throws URISyntaxException, JsonProcessingException {
         log.debug("REST request to update Review : {}", reviewDTO);
         if (reviewDTO.getId() == null) {
             return createReview(reviewDTO);

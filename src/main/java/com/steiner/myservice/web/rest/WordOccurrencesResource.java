@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,7 +33,7 @@ public class WordOccurrencesResource {
     private final Logger log = LoggerFactory.getLogger(WordOccurrencesResource.class);
 
     private static final String ENTITY_NAME = "wordOccurrences";
-        
+
     private final WordOccurrencesRepository wordOccurrencesRepository;
 
     private final WordOccurrencesMapper wordOccurrencesMapper;
@@ -42,10 +44,12 @@ public class WordOccurrencesResource {
     }
 
     /**
-     * POST  /word-occurrences : Create a new wordOccurrences.
+     * POST /word-occurrences : Create a new wordOccurrences.
      *
      * @param wordOccurrencesDTO the wordOccurrencesDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new wordOccurrencesDTO, or with status 400 (Bad Request) if the wordOccurrences has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body the
+     * new wordOccurrencesDTO, or with status 400 (Bad Request) if the
+     * wordOccurrences has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/word-occurrences")
@@ -59,17 +63,18 @@ public class WordOccurrencesResource {
         wordOccurrences = wordOccurrencesRepository.save(wordOccurrences);
         WordOccurrencesDTO result = wordOccurrencesMapper.wordOccurrencesToWordOccurrencesDTO(wordOccurrences);
         return ResponseEntity.created(new URI("/api/word-occurrences/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**
-     * PUT  /word-occurrences : Updates an existing wordOccurrences.
+     * PUT /word-occurrences : Updates an existing wordOccurrences.
      *
      * @param wordOccurrencesDTO the wordOccurrencesDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated wordOccurrencesDTO,
-     * or with status 400 (Bad Request) if the wordOccurrencesDTO is not valid,
-     * or with status 500 (Internal Server Error) if the wordOccurrencesDTO couldnt be updated
+     * @return the ResponseEntity with status 200 (OK) and with body the updated
+     * wordOccurrencesDTO, or with status 400 (Bad Request) if the
+     * wordOccurrencesDTO is not valid, or with status 500 (Internal Server
+     * Error) if the wordOccurrencesDTO couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/word-occurrences")
@@ -83,14 +88,15 @@ public class WordOccurrencesResource {
         wordOccurrences = wordOccurrencesRepository.save(wordOccurrences);
         WordOccurrencesDTO result = wordOccurrencesMapper.wordOccurrencesToWordOccurrencesDTO(wordOccurrences);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, wordOccurrencesDTO.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, wordOccurrencesDTO.getId().toString()))
+                .body(result);
     }
 
     /**
-     * GET  /word-occurrences : get all the wordOccurrences.
+     * GET /word-occurrences : get all the wordOccurrences.
      *
-     * @return the ResponseEntity with status 200 (OK) and the list of wordOccurrences in body
+     * @return the ResponseEntity with status 200 (OK) and the list of
+     * wordOccurrences in body
      */
     @GetMapping("/word-occurrences")
     @Timed
@@ -101,10 +107,34 @@ public class WordOccurrencesResource {
     }
 
     /**
-     * GET  /word-occurrences/:id : get the "id" wordOccurrences.
+     * GET /word-occurrences : get 500 most frequent words from wordOccurrences.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of
+     * wordOccurrences in body
+     */
+    @GetMapping("/word-occurrences/top")
+    @Timed
+    public List<WordOccurrencesDTO> getTopWordOccurrences() {
+
+        ArrayList<Object[]> findTopWords = wordOccurrencesRepository.findTopWords();
+        List<WordOccurrences> mylist = new ArrayList<>();
+        int i = 0;
+        while (i < findTopWords.size()) {
+            WordOccurrences myWordOccurrence = new WordOccurrences();
+            myWordOccurrence.setWord((String) findTopWords.get(i)[0]);
+            myWordOccurrence.setAmountoccurrences(Integer.parseInt(findTopWords.get(i)[1].toString()));
+            mylist.add(myWordOccurrence);
+            i += 1;
+        }
+        return wordOccurrencesMapper.wordOccurrencesToWordOccurrencesDTOs(mylist);
+    }
+
+    /**
+     * GET /word-occurrences/:id : get the "id" wordOccurrences.
      *
      * @param id the id of the wordOccurrencesDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the wordOccurrencesDTO, or with status 404 (Not Found)
+     * @return the ResponseEntity with status 200 (OK) and with body the
+     * wordOccurrencesDTO, or with status 404 (Not Found)
      */
     @GetMapping("/word-occurrences/{id}")
     @Timed
@@ -116,7 +146,7 @@ public class WordOccurrencesResource {
     }
 
     /**
-     * DELETE  /word-occurrences/:id : delete the "id" wordOccurrences.
+     * DELETE /word-occurrences/:id : delete the "id" wordOccurrences.
      *
      * @param id the id of the wordOccurrencesDTO to delete
      * @return the ResponseEntity with status 200 (OK)
