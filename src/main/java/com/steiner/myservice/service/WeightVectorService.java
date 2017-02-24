@@ -1,6 +1,5 @@
 package com.steiner.myservice.service;
 
-import aj.org.objectweb.asm.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.steiner.myservice.domain.ReviewVector;
@@ -11,11 +10,8 @@ import com.steiner.myservice.service.dto.ReviewVectorDTO;
 import com.steiner.myservice.service.dto.WordOccurrencesDTO;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,29 +48,35 @@ public class WeightVectorService {
 
         TopWordOccurrencesService topWordOccurrencesService
                 = new TopWordOccurrencesService(wordOccurrencesRepository);
-        List<WordOccurrences> topWordOccurrenceslist = topWordOccurrencesService.getTopWords();
+        ArrayList<WordOccurrences> topWordOccurrenceslist = (ArrayList<WordOccurrences>) topWordOccurrencesService.getTopWords();
 
-        ArrayList<String> topWordslist = topWordOccurrenceslist.stream().map(wordOccurrences -> {
-            return wordOccurrences.getWord();
-        }).collect(Collectors.toCollection(ArrayList::new));
+        topWordOccurrenceslist.sort((e1, e2) -> Integer.compare(e1.getAmountoccurrences(),
+                e2.getAmountoccurrences()));
+        Collections.reverse(topWordOccurrenceslist);
+
+        ArrayList<String> topWordslist = new ArrayList<>();
+
+        topWordOccurrenceslist.stream().map(wordOccurrences -> {
+            String x = wordOccurrences.getWord();
+            return x;
+        }).forEachOrdered((x) -> {
+            topWordslist.add(x);
+        });
 
         Integer quantityinunion = wordOccurrencesDTOList.stream()
-                .filter(e -> topWordslist.contains(e.getWord())).collect(Collectors.summingInt(e -> e.getAmountoccurrences()));
+                .filter(x -> topWordslist.contains(x.getWord())).collect(Collectors.summingInt(x -> x.getAmountoccurrences()));
 
-        Map<String, Double> wordOccurrencesDTOMap;
+        LinkedHashMap<String, Double> wordOccurrencesDTOMap = new LinkedHashMap<>();
 
-        Map<String, Double> weightwordOccurrences = new HashMap<>();
+        LinkedHashMap<String, Double> weightwordOccurrences = new LinkedHashMap<>();
 
-        wordOccurrencesDTOMap
-                = wordOccurrencesDTOList.stream()
-                        .collect(Collectors.toMap(x -> x.getWord(),
-                                x -> {
-                                    return ((double) x.getAmountoccurrences());
+        wordOccurrencesDTOList.stream().forEachOrdered((x) -> {
 
-                                }
-                        ));
+            wordOccurrencesDTOMap.put(x.getWord(), (double) x.getAmountoccurrences());
 
-        topWordslist.forEach((word) -> {
+        });
+
+        topWordslist.stream().forEachOrdered((word) -> {
             if (wordOccurrencesDTOMap.containsKey(word)) {
                 weightwordOccurrences.put(word, wordOccurrencesDTOMap.get(word) / quantityinunion);
 
@@ -87,6 +89,7 @@ public class WeightVectorService {
         String weightvectorJson = mapper.writeValueAsString(weightwordOccurrences);
         ReviewVectorDTO weightvector = new ReviewVectorDTO();
         weightvector.setVector(weightvectorJson);
+        weightvector.setId(id);
         log.info("Finish process get WeightVector : {}", weightvectorJson);
         return weightvector;
 
