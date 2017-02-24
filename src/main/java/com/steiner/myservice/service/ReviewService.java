@@ -39,8 +39,8 @@ public class ReviewService {
     public Review createReview(ReviewDTO reviewDTO) throws JsonProcessingException {
         Review review = new Review();
         UtilService utilService = new UtilService();
-        WordoccurrencesService wordoccurrencesService
-                = new WordoccurrencesService(wordOccurrencesRepository,reviewVectorRepository);
+        WordOccurrencesService wordOccurrencesService
+                = new WordOccurrencesService(wordOccurrencesRepository,reviewVectorRepository);
         Book book = bookRepository.findOne(reviewDTO.getBookId());
         review.setBook(book);
         String cleanreviewstring = utilService.cleanString(reviewDTO.getReviewstring());
@@ -51,7 +51,7 @@ public class ReviewService {
         Map<String, Integer> myMap;
         myMap = utilService.CountWords(cleanreviewtext);
         review = reviewRepository.save(review);
-        wordoccurrencesService.updateWordOccurrences(review, myMap);
+        wordOccurrencesService.updateWordOccurrences(review, myMap);
         log.debug("Created Review: {}", review);
         return review;
     }

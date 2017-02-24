@@ -4,6 +4,7 @@ import com.steiner.myservice.MyserviceApp;
 
 import com.steiner.myservice.domain.ReviewVector;
 import com.steiner.myservice.repository.ReviewVectorRepository;
+import com.steiner.myservice.repository.WordOccurrencesRepository;
 import com.steiner.myservice.service.dto.ReviewVectorDTO;
 import com.steiner.myservice.service.mapper.ReviewVectorMapper;
 import com.steiner.myservice.web.rest.errors.ExceptionTranslator;
@@ -45,6 +46,9 @@ public class ReviewVectorResourceIntTest {
 
     @Autowired
     private ReviewVectorRepository reviewVectorRepository;
+    
+    @Autowired
+    private WordOccurrencesRepository wordOccurrencesRepository;
 
     @Autowired
     private ReviewVectorMapper reviewVectorMapper;
@@ -68,7 +72,8 @@ public class ReviewVectorResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-            ReviewVectorResource reviewVectorResource = new ReviewVectorResource(reviewVectorRepository, reviewVectorMapper);
+            ReviewVectorResource reviewVectorResource = new ReviewVectorResource(reviewVectorRepository,
+                    reviewVectorMapper,wordOccurrencesRepository);
         this.restReviewVectorMockMvc = MockMvcBuilders.standaloneSetup(reviewVectorResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

@@ -4,10 +4,13 @@ import com.codahale.metrics.annotation.Timed;
 import com.steiner.myservice.domain.ReviewVector;
 
 import com.steiner.myservice.repository.ReviewVectorRepository;
+import com.steiner.myservice.repository.WordOccurrencesRepository;
+import com.steiner.myservice.service.WeightVectorService;
 import com.steiner.myservice.web.rest.util.HeaderUtil;
 import com.steiner.myservice.service.dto.ReviewVectorDTO;
 import com.steiner.myservice.service.mapper.ReviewVectorMapper;
 import io.github.jhipster.web.util.ResponseUtil;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing ReviewVector.
@@ -31,21 +32,27 @@ public class ReviewVectorResource {
     private final Logger log = LoggerFactory.getLogger(ReviewVectorResource.class);
 
     private static final String ENTITY_NAME = "reviewVector";
-        
+
     private final ReviewVectorRepository reviewVectorRepository;
 
     private final ReviewVectorMapper reviewVectorMapper;
 
-    public ReviewVectorResource(ReviewVectorRepository reviewVectorRepository, ReviewVectorMapper reviewVectorMapper) {
+    private final WordOccurrencesRepository wordOccurrencesRepository;
+
+    public ReviewVectorResource(ReviewVectorRepository reviewVectorRepository, ReviewVectorMapper reviewVectorMapper,
+            WordOccurrencesRepository wordOccurrencesRepository) {
         this.reviewVectorRepository = reviewVectorRepository;
         this.reviewVectorMapper = reviewVectorMapper;
+        this.wordOccurrencesRepository = wordOccurrencesRepository;
     }
 
     /**
-     * POST  /review-vectors : Create a new reviewVector.
+     * POST /review-vectors : Create a new reviewVector.
      *
      * @param reviewVectorDTO the reviewVectorDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new reviewVectorDTO, or with status 400 (Bad Request) if the reviewVector has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body the
+     * new reviewVectorDTO, or with status 400 (Bad Request) if the reviewVector
+     * has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/review-vectors")
@@ -59,17 +66,18 @@ public class ReviewVectorResource {
         reviewVector = reviewVectorRepository.save(reviewVector);
         ReviewVectorDTO result = reviewVectorMapper.reviewVectorToReviewVectorDTO(reviewVector);
         return ResponseEntity.created(new URI("/api/review-vectors/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**
-     * PUT  /review-vectors : Updates an existing reviewVector.
+     * PUT /review-vectors : Updates an existing reviewVector.
      *
      * @param reviewVectorDTO the reviewVectorDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated reviewVectorDTO,
-     * or with status 400 (Bad Request) if the reviewVectorDTO is not valid,
-     * or with status 500 (Internal Server Error) if the reviewVectorDTO couldnt be updated
+     * @return the ResponseEntity with status 200 (OK) and with body the updated
+     * reviewVectorDTO, or with status 400 (Bad Request) if the reviewVectorDTO
+     * is not valid, or with status 500 (Internal Server Error) if the
+     * reviewVectorDTO couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/review-vectors")
@@ -83,14 +91,15 @@ public class ReviewVectorResource {
         reviewVector = reviewVectorRepository.save(reviewVector);
         ReviewVectorDTO result = reviewVectorMapper.reviewVectorToReviewVectorDTO(reviewVector);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, reviewVectorDTO.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, reviewVectorDTO.getId().toString()))
+                .body(result);
     }
 
     /**
-     * GET  /review-vectors : get all the reviewVectors.
+     * GET /review-vectors : get all the reviewVectors.
      *
-     * @return the ResponseEntity with status 200 (OK) and the list of reviewVectors in body
+     * @return the ResponseEntity with status 200 (OK) and the list of
+     * reviewVectors in body
      */
     @GetMapping("/review-vectors")
     @Timed
@@ -101,10 +110,11 @@ public class ReviewVectorResource {
     }
 
     /**
-     * GET  /review-vectors/:id : get the "id" reviewVector.
+     * GET /review-vectors/:id : get the "id" reviewVector.
      *
      * @param id the id of the reviewVectorDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the reviewVectorDTO, or with status 404 (Not Found)
+     * @return the ResponseEntity with status 200 (OK) and with body the
+     * reviewVectorDTO, or with status 404 (Not Found)
      */
     @GetMapping("/review-vectors/{id}")
     @Timed
@@ -116,7 +126,26 @@ public class ReviewVectorResource {
     }
 
     /**
-     * DELETE  /review-vectors/:id : delete the "id" reviewVector.
+     * GET /review-vectors/weight/:id : get the "id" reviewVector.
+     *
+     * @param id the id of the reviewVector to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the
+     * reviewVectorWeight, or with status 404 (Not Found)
+     * @throws java.io.IOException
+     */
+    @GetMapping("/review-vectors/weight/{id}")
+    @Timed
+    public ResponseEntity<ReviewVectorDTO> getReviewVectorWeight(@PathVariable Long id) throws IOException {
+        log.debug("REST request to get WeightVector : {}", id);
+        WeightVectorService weightVectorService
+                = new WeightVectorService(wordOccurrencesRepository, reviewVectorRepository);
+
+        ReviewVectorDTO weightVector = weightVectorService.getWeightVector(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(weightVector));
+    }
+
+    /**
+     * DELETE /review-vectors/:id : delete the "id" reviewVector.
      *
      * @param id the id of the reviewVectorDTO to delete
      * @return the ResponseEntity with status 200 (OK)

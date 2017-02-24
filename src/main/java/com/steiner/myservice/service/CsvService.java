@@ -53,8 +53,8 @@ public class CsvService {
         book = bookRepository.findOne(bookId);
         Optional<Book> existingBook;
         existingBook = Optional.ofNullable(bookRepository.findOne(bookId));
-        CreatereviewcsvService createreviewcsvService
-                = new CreatereviewcsvService(reviewRepository,
+        CreateReviewCsvService createreviewcsvService
+                = new CreateReviewCsvService(reviewRepository,
                         wordOccurrencesRepository,
                         bookRepository, reviewVectorRepository);
 

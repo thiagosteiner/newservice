@@ -16,38 +16,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class CreatereviewcsvService {
+public class CreateReviewCsvService {
 
-    private final Logger log = LoggerFactory.getLogger(CreatereviewcsvService.class);
+    private final Logger log = LoggerFactory.getLogger(CreateReviewCsvService.class);
 
     private final ReviewRepository reviewRepository;
     private final ReviewVectorRepository reviewVectorRepository;
- 
+
     private final WordOccurrencesRepository wordOccurrencesRepository;
 
-    public CreatereviewcsvService(ReviewRepository reviewRepository,
+    public CreateReviewCsvService(ReviewRepository reviewRepository,
             WordOccurrencesRepository wordOccurrencesRepository,
-            BookRepository bookRepository,ReviewVectorRepository reviewVectorRepository) {
+            BookRepository bookRepository, ReviewVectorRepository reviewVectorRepository) {
         this.reviewRepository = reviewRepository;
         this.wordOccurrencesRepository = wordOccurrencesRepository;
-        this.reviewVectorRepository=reviewVectorRepository;
-           }
+        this.reviewVectorRepository = reviewVectorRepository;
+    }
 
     @Async
     public void createreviewcsv(String mystring, Book book) throws JsonProcessingException {
         UtilService utilService = new UtilService();
         Review newReview = new Review();
         newReview.setBook(book);
-         newReview.setReviewstring("string");
+        newReview.setReviewstring("string");
         newReview.setReviewtext(mystring);
         Map<String, Integer> myMap;
         myMap = utilService.CountWords(mystring);
         newReview = reviewRepository.save(newReview);
-        WordoccurrencesService wordoccurrencesService
-                = new WordoccurrencesService(wordOccurrencesRepository,reviewVectorRepository);
-         wordoccurrencesService.updateWordOccurrences(newReview, myMap);
+        WordOccurrencesService wordOccurrencesService
+                = new WordOccurrencesService(wordOccurrencesRepository, reviewVectorRepository);
+        wordOccurrencesService.updateWordOccurrences(newReview, myMap);
 
     }
-    
-}
 
+}

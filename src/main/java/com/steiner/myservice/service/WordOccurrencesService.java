@@ -21,34 +21,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class WordoccurrencesService {
+public class WordOccurrencesService {
 
-    private final Logger log = LoggerFactory.getLogger(WordoccurrencesService.class);
+    private final Logger log = LoggerFactory.getLogger(WordOccurrencesService.class);
 
     private final WordOccurrencesRepository wordOccurrencesRepository;
     private final ReviewVectorRepository reviewVectorRepository;
-    
-    
-    public WordoccurrencesService(WordOccurrencesRepository wordOccurrencesRepository,
+
+    public WordOccurrencesService(WordOccurrencesRepository wordOccurrencesRepository,
             ReviewVectorRepository reviewVectorRepository) {
 
         this.wordOccurrencesRepository = wordOccurrencesRepository;
-        this.reviewVectorRepository=reviewVectorRepository;
+        this.reviewVectorRepository = reviewVectorRepository;
     }
 
-    
-    public void updateWordOccurrences(Review newReview, Map<String, Integer> myMap) throws JsonProcessingException {
+public void updateWordOccurrences(Review newReview, Map<String, Integer> myMap) throws JsonProcessingException {
 
         Set<String> keys = myMap.keySet();
         ArrayList<WordOccurrences> wordOccurrencesList = new ArrayList<>();
         ArrayList<WordOccurrencesDTO> wordOccurrencesDTOList = new ArrayList<>();
-        
+
         ObjectMapper mapper = new ObjectMapper();
         Hibernate5Module module = new Hibernate5Module();
         module.enable(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
         module.enable(Feature.FORCE_LAZY_LOADING);
         mapper.registerModule(module);
-    
+
         keys.stream().map((key) -> {
             WordOccurrences wordOccurences = new WordOccurrences();
             wordOccurences.setReview(newReview);
@@ -59,6 +57,7 @@ public class WordoccurrencesService {
             wordOccurrencesRepository.save(wordOccurences);
             wordOccurrencesList.add(wordOccurences);
         });
+        myMap.clear();
 
         wordOccurrencesDTOList
                 = (ArrayList<WordOccurrencesDTO>) WordOccurrencesMapper.INSTANCE
@@ -68,10 +67,13 @@ public class WordoccurrencesService {
         try {
             newReviewVector.setVector(mapper.writeValueAsString(wordOccurrencesDTOList));
         } catch (JsonProcessingException jsonProcessingException) {
+
+            log.error("Error Json {}", jsonProcessingException);
+
         }
         reviewVectorRepository.save(newReviewVector);
-
+        wordOccurrencesList.clear();
+        wordOccurrencesDTOList.clear();
     }
 
 }
-

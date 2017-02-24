@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.steiner.myservice.domain.WordOccurrences;
 
 import com.steiner.myservice.repository.WordOccurrencesRepository;
+import com.steiner.myservice.service.TopWordOccurrencesService;
 import com.steiner.myservice.web.rest.util.HeaderUtil;
 import com.steiner.myservice.service.dto.WordOccurrencesDTO;
 import com.steiner.myservice.service.mapper.WordOccurrencesMapper;
@@ -16,12 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing WordOccurrences.
@@ -116,16 +113,10 @@ public class WordOccurrencesResource {
     @Timed
     public List<WordOccurrencesDTO> getTopWordOccurrences() {
 
-        ArrayList<Object[]> findTopWords = wordOccurrencesRepository.findTopWords();
-        List<WordOccurrences> mylist = new ArrayList<>();
-        int i = 0;
-        while (i < findTopWords.size()) {
-            WordOccurrences myWordOccurrence = new WordOccurrences();
-            myWordOccurrence.setWord((String) findTopWords.get(i)[0]);
-            myWordOccurrence.setAmountoccurrences(Integer.parseInt(findTopWords.get(i)[1].toString()));
-            mylist.add(myWordOccurrence);
-            i += 1;
-        }
+        TopWordOccurrencesService topWordOccurrencesService;
+        topWordOccurrencesService = new TopWordOccurrencesService(wordOccurrencesRepository);
+        List<WordOccurrences> mylist = topWordOccurrencesService.getTopWords();
+
         return wordOccurrencesMapper.wordOccurrencesToWordOccurrencesDTOs(mylist);
     }
 
