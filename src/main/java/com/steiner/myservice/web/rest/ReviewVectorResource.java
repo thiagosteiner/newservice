@@ -126,11 +126,11 @@ public class ReviewVectorResource {
     }
 
     /**
-     * GET /review-vectors/weight/:id : get the "id" reviewVector.
+     * GET /review-vectors/weight/:id : get the "id" reviewVector with weightVector in json.
      *
      * @param id the id of the reviewVector to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the
-     * reviewVectorWeight, or with status 404 (Not Found)
+     * reviewVector with the with weightVector in json, or with status 404 (Not Found)
      * @throws java.io.IOException
      */
     @GetMapping("/review-vectors/weight/{id}")
